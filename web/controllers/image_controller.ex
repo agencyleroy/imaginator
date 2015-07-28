@@ -33,9 +33,15 @@ defmodule Imaginator.ImageController do
       @max_height
     end
 
+    text = if params["text"] != nil do
+      String.replace(params["text"], " ", "\\n")
+    else
+      "Agency\\nLeroy"
+    end
+
     {_, 0} = run_convert(image.path, "size", "#{width}x#{height} xc:grey")
     System.cmd "composite", ~w(-gravity Center -geometry #{width}^x#{height}^+0+0 #{image_copy.path} #{image.path} #{image.path}), stderr_to_stdout: true
-    run_mogrify(image.path, "gravity", "Center -family VenusSBOP-MediumExtended -kerning 5 -fill white -pointsize 24 -annotate 0 Agency\\nLeroy")
+    run_mogrify(image.path, "gravity", "Center -family VenusSBOP-MediumExtended -kerning 5 -fill white -pointsize 24 -annotate 0 #{text}")
     image |> verbose
   end
 
