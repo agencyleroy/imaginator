@@ -35,6 +35,8 @@ defmodule Imaginator.Mixfile do
      {:phoenix_html, "~> 1.4"},
      {:phoenix_live_reload, "~> 0.5", only: :dev},
      {:cowboy, "~> 1.0"},
+     {:calendar, "~> 0.8.0"},
+     {:timex, "~> 0.16.2"},
      {:mogrify, "~> 0.1"},
 
     ]
