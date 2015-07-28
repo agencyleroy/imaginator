@@ -26,6 +26,12 @@ defmodule SecureRandom do
       "2yDtUyQ5Xws="
 
   """
+  def number(int) do
+    :random.seed(:erlang.now)
+    :random.uniform(int)
+  end
+
+
   def base64(16) when is_integer 16 do
     random_bytes(16)
     |> :base64.encode_to_string
