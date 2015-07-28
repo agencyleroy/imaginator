@@ -3,6 +3,9 @@ defmodule Imaginator.ImageController do
 
   use Imaginator.Web, :controller
 
+  @max_width  3000
+  @max_height 3000
+
   def show(conn, _params) do
     img    = render_image(_params)
     random = SecureRandom.urlsafe_base64(16)
@@ -17,34 +20,34 @@ defmodule Imaginator.ImageController do
   #
   # Image transformation methods
   #
-  def create_image(image, params, image2) do
-
-    width  = if elem(Integer.parse(params["width"]), 0) <= 3000 do
+  def create_image(image, params, image_copy) do
+    # Sanitize the parameters being sent and make sure that they don't exceed the max width/height
+    width  = if elem(Integer.parse(params["width"]), 0) <= @max_width do
       params["width"]
     else
-      3000
+      @max_width
     end
-    height = if elem(Integer.parse(params["height"]), 0) <= 3000 do
+    height = if elem(Integer.parse(params["height"]), 0) <= @max_height do
       params["height"]
     else
-      3000
+      @max_height
     end
 
     {_, 0} = run_convert(image.path, "size", "#{width}x#{height} xc:grey")
-    System.cmd "composite", ~w(-gravity Center -geometry #{width}^x#{height}^+0+0 #{image2.path} #{image.path} #{image.path}), stderr_to_stdout: true
+    System.cmd "composite", ~w(-gravity Center -geometry #{width}^x#{height}^+0+0 #{image_copy.path} #{image.path} #{image.path}), stderr_to_stdout: true
     run_mogrify(image.path, "gravity", "Center -family VenusSBOP-MediumExtended -kerning 5 -fill white -pointsize 24 -annotate 0 Agency\\nLeroy")
     image |> verbose
   end
 
   def render_image(params) do
-    number = SecureRandom.number(7)
-    image = open("./priv/static/images/#{number}.jpg")
-    image2 = image
+    number     = SecureRandom.number(7) # Randomly select an image
+    image      = open("./priv/static/images/#{number}.jpg")
+    image_copy = image # Save a copy of the original version
 
     image
       |> copy
       |> format("jpg")
-      |> create_image(params, image2)
+      |> create_image(params, image_copy)
       |> verbose
   end
 
