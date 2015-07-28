@@ -19,12 +19,12 @@ defmodule Imaginator.ImageController do
   #
   def create_image(image, params, image2) do
 
-    width  = if params["width"] <= 3000 do
+    width  = if elem(Integer.parse(params["width"]), 0) <= 3000 do
       params["width"]
     else
       3000
     end
-    height = if params["height"] <= 3000 do
+    height = if elem(Integer.parse(params["height"]), 0) <= 3000 do
       params["height"]
     else
       3000
