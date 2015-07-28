@@ -37,7 +37,8 @@ defmodule Imaginator.ImageController do
   end
 
   def render_image(params) do
-    image = open("./priv/static/images/lundia.jpg")
+    number = 1
+    image = open("./priv/static/images/#{number}.jpg")
     image2 = image
 
     image
