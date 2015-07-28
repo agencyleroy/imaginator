@@ -18,7 +18,7 @@ defmodule Imaginator.Mixfile do
   def application do
     [mod: {Imaginator, []},
      applications: [:phoenix, :phoenix_html, :cowboy, :logger,
-                    :phoenix_ecto, :postgrex, :phoenix_live_reload, :mogrify]]
+                    :phoenix_ecto, :postgrex, :mogrify]]
   end
 
   # Specifies which paths to compile per environment
