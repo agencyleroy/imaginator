@@ -41,7 +41,7 @@ defmodule Imaginator.ImageController do
 
     {_, 0} = run_convert(image.path, "size", "#{width}x#{height} xc:grey")
     System.cmd "composite", ~w(-gravity Center -geometry #{width}^x#{height}^+0+0 #{image_copy.path} #{image.path} #{image.path}), stderr_to_stdout: true
-    run_mogrify(image.path, "gravity", "Center -family VenusSBOP-MediumExtended -kerning 5 -fill white -pointsize 24 -annotate 0 #{text}")
+    run_mogrify(image.path, "gravity", "Center -family Helvetica -fill white -pointsize 24 -annotate 0 #{text}")
     image |> verbose
   end
 
