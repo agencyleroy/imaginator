@@ -19,8 +19,16 @@ defmodule Imaginator.ImageController do
   #
   def create_image(image, params, image2) do
 
-    width  = if params["width"] <= 3000 do params["width"] else 3000 end
-    height = if params["height"] <= 3000 do params["height"] else 3000 end
+    width  = if params["width"] <= 3000 do
+      params["width"]
+    else
+      3000
+    end
+    height = if params["height"] <= 3000 do
+      params["height"]
+    else
+      3000
+    end
 
     {_, 0} = run_convert(image.path, "size", "#{width}x#{height} xc:grey")
     System.cmd "composite", ~w(-gravity Center -geometry #{width}^x#{height}^+0+0 #{image2.path} #{image.path} #{image.path}), stderr_to_stdout: true
