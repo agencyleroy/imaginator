@@ -1,10 +1,8 @@
 defmodule Imaginator.ImageController do
-  alias Placeholder.Generator, as: Generator
-
   use Imaginator.Web, :controller
 
   def show(conn, _params) do
-    img  = Generator.render_image(_params)
+    img  = Placeholder.Generator.render_image(_params)
 
     # Set date for expires header according to RFC1123 standard
     date = :calendar.universal_time
