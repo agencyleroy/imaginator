@@ -4,8 +4,9 @@ defmodule Imaginator.ImageController do
   use Imaginator.Web, :controller
 
   def show(conn, _params) do
-    img    = Generator.render_image(_params)
+    img  = Generator.render_image(_params)
 
+    # Set date for expires header according to RFC1123 standard
     date = :calendar.universal_time
      |>  Timex.Date.from
      |>  Timex.Date.shift(secs: 24*3600*365)
