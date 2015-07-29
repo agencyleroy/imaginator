@@ -20,16 +20,17 @@ defmodule Imaginator.Endpoint do
   plug Plug.Logger
 
   plug Plug.Parsers,
-    parsers: [:urlencoded, :multipart],
-    pass: ["*/*"]
+    parsers: [:urlencoded, :multipart, :json],
+    pass: ["*/*"],
+    json_decoder: Poison
 
   plug Plug.MethodOverride
   plug Plug.Head
 
-  # plug Plug.Session,
-  #   store: :cookie,
-  #   key: "_imaginator_key",
-  #   signing_salt: "ZnQ5VEE9"
+  plug Plug.Session,
+    store: :cookie,
+    key: "_imaginator_key",
+    signing_salt: "ZnQ5VEE9"
 
   plug Imaginator.Router
 end
