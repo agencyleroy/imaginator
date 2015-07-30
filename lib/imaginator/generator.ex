@@ -42,10 +42,7 @@ defmodule Placeholder.Generator do
 
   defp normalize_width(width) when is_number(elem(width, 0)) do
     width = elem(width, 0)
-    if width > @max_width do
-      width = @max_width
-    end
-    width
+    if width > @max_width, do: width = @max_width, else: width
   end
 
   defp normalize_width(:error) do
@@ -54,10 +51,7 @@ defmodule Placeholder.Generator do
 
   defp normalize_height(height) when is_number(elem(height, 0)) do
     height = elem(height, 0)
-    if height > @max_height do
-      height = @max_height
-    end
-    height
+    if height > @max_height, do: height = @max_height, else: height
   end
 
   defp normalize_height(:error) do
