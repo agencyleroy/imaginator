@@ -20,8 +20,7 @@ defmodule Placeholder.Generator do
   @doc "Creates a new image by combining a grey rectangle with a randomly chosen image"
   def create_image(image, params, image_copy) do
     # Sanitize the parameters being sent and make sure that they don't exceed the max width/height
-    width  = sanitize_width(params["width"])
-    height = sanitize_height(params["height"])
+    {width, height} = sanitize_resolution({params["width"], params["height"]})
 
     text = if params["text"] != nil do
       String.replace(params["text"], " ", "\\n")
@@ -35,19 +34,33 @@ defmodule Placeholder.Generator do
     image
   end
 
-  defp sanitize_width(width) do
-    if elem(Integer.parse(width), 0) <= @max_width do
-      width
-    else
-      @max_width
-    end
+  defp sanitize_resolution({width, height}) do
+    width  = Integer.parse(width)
+    height = Integer.parse(height)
+    {normalize_width(width), normalize_height(height)}
   end
 
-  defp sanitize_height(height) do
-    if elem(Integer.parse(height), 0) <= @max_height do
-      height
-    else
-      @max_height
+  defp normalize_width(width) when is_number(elem(width, 0)) do
+    width = elem(width, 0)
+    if width > @max_width do
+      width = @max_width
     end
+    width
+  end
+
+  defp normalize_width(:error) do
+    100
+  end
+
+  defp normalize_height(height) when is_number(elem(height, 0)) do
+    height = elem(height, 0)
+    if height > @max_height do
+      height = @max_height
+    end
+    height
+  end
+
+  defp normalize_height(:error) do
+    100
   end
 end
