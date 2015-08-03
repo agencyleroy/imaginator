@@ -7,8 +7,7 @@ defmodule Placeholder.Generator do
 
   @doc "Opens a random file for processing and returns the new processed image"
   def render_image(params) do
-    number     = SecureRandom.number(7) # Randomly select an image
-    image      = open("./priv/static/images/#{number}.jpg")
+    image      = select_image(params)
     image_copy = image # Save a copy of the original version
 
     image
@@ -22,6 +21,7 @@ defmodule Placeholder.Generator do
     # Sanitize the parameters being sent and make sure that they don't exceed the max width/height
     {width, height} = sanitize_resolution({params["width"], params["height"]})
 
+    # Set the text if defined
     text = if params["text"] != nil do
       String.replace(params["text"], " ", "\\n")
     else
@@ -32,6 +32,25 @@ defmodule Placeholder.Generator do
     System.cmd "composite", ~w(-gravity Center -geometry #{width}^x#{height}^+0+0 #{image_copy.path} #{image.path} #{image.path}), stderr_to_stdout: true
     System.cmd "mogrify",  ~w(-gravity Center -family Helvetica -fill white -pointsize 24 -annotate 0 #{text} #{String.replace(image.path, " ", "\\ ")}), stderr_to_stdout: true
     {:ok, image}
+  end
+
+  @doc "Randomly selects and iamge based on params"
+  def select_image(params) do
+    # Search images from category
+    category = if params["category"] != nil do
+      String.replace(params["category"], " ", "\\n")
+    else
+      "." # All images
+    end
+
+    total  = if category == "food" do
+      11
+    else
+      7
+    end
+
+    number = SecureRandom.number(total) # Randomly generate a number for image selection
+    img    = open("./priv/static/images/#{category}/#{number}.jpg")
   end
 
   defp sanitize_resolution({width, height}) do
