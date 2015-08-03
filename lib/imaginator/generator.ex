@@ -31,7 +31,7 @@ defmodule Placeholder.Generator do
     {_, 0} = System.cmd "convert", ~w(-size #{width}x#{height} xc:grey #{String.replace(image.path, " ", "\\ ")}), stderr_to_stdout: true
     System.cmd "composite", ~w(-gravity Center -geometry #{width}^x#{height}^+0+0 #{image_copy.path} #{image.path} #{image.path}), stderr_to_stdout: true
     System.cmd "mogrify",  ~w(-gravity Center -family Helvetica -fill white -pointsize 24 -annotate 0 #{text} #{String.replace(image.path, " ", "\\ ")}), stderr_to_stdout: true
-    image
+    {:ok, image}
   end
 
   defp sanitize_resolution({width, height}) do
