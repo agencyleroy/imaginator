@@ -6,7 +6,7 @@ defmodule Placeholder.Imaginator do
   @doc """
   Starts the registry.
   """
-  def start_link(opts) do
+  def start_link(_) do
     GenServer.start_link(__MODULE__, :ok, [])
   end
 

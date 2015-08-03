@@ -3,7 +3,7 @@ defmodule Mogrify do
 
   def open(path) do
     path = Path.expand(path)
-    unless File.regular?(path), do: raise(File.Error)
+    unless File.regular?(path), do: raise("#{path} could not be opened")
 
     %Image{path: path, ext: Path.extname(path)}
   end

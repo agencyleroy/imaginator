@@ -34,7 +34,7 @@ defmodule Placeholder.Generator do
     {:ok, image}
   end
 
-  @doc "Randomly selects and iamge based on params"
+  @doc "Randomly selects and image based on params"
   def select_image(params) do
     # Search images from category
     category = if params["category"] != nil do
@@ -50,7 +50,9 @@ defmodule Placeholder.Generator do
     end
 
     number = SecureRandom.number(total) # Randomly generate a number for image selection
-    img    = open("./priv/static/images/#{category}/#{number}.jpg")
+    path   = elem(File.cwd, 1) <> "/priv/static/images/#{category}/#{number}.jpg"
+
+    open(path)
   end
 
   defp sanitize_resolution({width, height}) do
@@ -61,7 +63,7 @@ defmodule Placeholder.Generator do
 
   defp normalize_width(width) when is_number(elem(width, 0)) do
     width = elem(width, 0)
-    if width > @max_width, do: width = @max_width, else: width
+    if width > @max_width, do: @max_width, else: width
   end
 
   defp normalize_width(:error) do
@@ -70,7 +72,7 @@ defmodule Placeholder.Generator do
 
   defp normalize_height(height) when is_number(elem(height, 0)) do
     height = elem(height, 0)
-    if height > @max_height, do: height = @max_height, else: height
+    if height > @max_height, do: @max_height, else: height
   end
 
   defp normalize_height(:error) do
