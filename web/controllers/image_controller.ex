@@ -3,10 +3,13 @@ defmodule Imaginator.ImageController do
 
   def show(conn, _params) do
     # Do the processing in an external process using GenServer
-    {:ok, pid} = Placeholder.Imaginator.start_link(Imaginator)
-    Placeholder.Imaginator.process(pid, {_params})
-
-    image = Placeholder.Imaginator.get(pid, :image)
+    case Placeholder.Imaginator.start_link(Imaginator) do
+      {:ok, pid} ->
+        Placeholder.Imaginator.process(pid, {_params})
+        image = Placeholder.Imaginator.get(pid, :image)
+      {:error} ->
+        raise "something went wrong"
+    end
 
     # Set date for expires header according to RFC1123 standard
     date = :calendar.universal_time
